@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>A Little Invitation</title>
+<meta name="description" content="A little something for you.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=DM+Sans:wght@400;500;600&family=Caveat:wght@500;600&family=Mrs+Saint+Delafield&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- floating grain / vignette layer -->
+<div class="grain" aria-hidden="true"></div>
+
+<!-- music toggle -->
+<button id="musicToggle" class="music-toggle" type="button" aria-pressed="false" aria-label="Toggle background music">
+  <span class="music-toggle__disc" aria-hidden="true"></span>
+  <span class="music-toggle__label">&#9834;</span>
+</button>
+<audio id="bgMusic" loop preload="none"></audio>
+
+<!-- progress indicator -->
+<div id="progress" class="progress" aria-hidden="true">
+  <span class="progress__dot" data-step="1"></span>
+  <span class="progress__dot" data-step="2"></span>
+  <span class="progress__dot" data-step="3"></span>
+  <span class="progress__dot" data-step="4"></span>
+  <span class="progress__dot" data-step="5"></span>
+  <span class="progress__dot" data-step="6"></span>
+</div>
+
+<main id="app" role="main">
+
+  <!-- SCREEN 01 — OPENING -->
+  <section class="screen is-active" data-screen="opening" aria-label="Opening">
+    <div class="screen__inner screen__inner--center">
+      <p class="eyebrow" data-copy="openingEyebrow">A little something for you.</p>
+      <p class="fine-print" data-copy="openingHint">Open when you're curious.</p>
+      <button class="btn btn--primary" data-next="intro" data-copy="openingButton">Open it &rarr;</button>
+    </div>
+  </section>
+
+  <!-- SCREEN 02 — INTRO -->
+  <section class="screen" data-screen="intro" aria-label="Intro">
+    <div class="screen__inner screen__inner--center">
+      <button class="btn btn--ghost btn--back" data-back="opening" style="visibility:hidden" tabindex="-1">&larr; Back</button>
+      <img id="photoReveal" class="photo-reveal" src="" alt="" hidden>
+      <h1 class="display reveal-text" data-copy="introTitle">Hey, you.</h1>
+      <p class="body-lg" data-copy="introBody">I&rsquo;ve been meaning to ask you something.</p>
+      <button class="btn btn--primary" data-next="song" data-copy="introButton">What is it?</button>
+    </div>
+  </section>
+
+  <!-- SCREEN 02b — SONG / LOVE PLAYLIST -->
+  <section class="screen" data-screen="song" aria-label="A little song">
+    <div class="screen__inner screen__inner--center">
+      <button class="btn btn--ghost btn--back" data-back="intro">&larr; Back</button>
+
+      <div class="vinyl-card">
+        <div class="vinyl-card__disc" id="vinylDisc" aria-hidden="true"></div>
+        <div class="vinyl-card__polaroid">
+          <div class="vinyl-card__header">
+            <span id="songLabel">Love Playlist</span>
+          </div>
+          <img id="songPhoto" class="vinyl-card__photo" src="" alt="" hidden>
+          <div class="vinyl-card__controls">
+            <span class="vinyl-card__skip" aria-hidden="true">&#9198;</span>
+            <button id="vinylPlayBtn" class="vinyl-card__play" type="button" aria-pressed="false" aria-label="Play our song">&#9658;</button>
+            <span class="vinyl-card__skip" aria-hidden="true">&#9197;</span>
+          </div>
+        </div>
+      </div>
+      <p class="fine-print vinyl-card__caption" id="songCaption">Tap play to hear our song.</p>
+      <p class="body-lg vinyl-card__quote" id="songQuote" hidden></p>
+
+      <button class="btn btn--primary" data-next="question">Continue &rarr;</button>
+    </div>
+  </section>
+
+  <!-- SCREEN 03 — THE QUESTION -->
+  <section class="screen" data-screen="question" aria-label="The question">
+    <div class="screen__inner screen__inner--center">
+      <button class="btn btn--ghost btn--back" data-back="song">&larr; Back</button>
+      <h1 class="display display--xl reveal-text" data-copy="questionTitle">I think we should go on a date.</h1>
+      <p class="body-lg" data-copy="questionSubtitle">So&hellip; what do you think?</p>
+      <button class="btn btn--primary" data-next="pick-day" data-copy="questionButton">Okay, tell me more &rarr;</button>
+    </div>
+  </section>
+
+  <!-- SCREEN 04 — PICK A DAY -->
+  <section class="screen" data-screen="pick-day" aria-label="Pick a day">
+    <div class="screen__inner">
+      <button class="btn btn--ghost btn--back" data-back="question">&larr; Back</button>
+      <h2 class="display">First, pick a day.</h2>
+      <p class="body">Find a day that works for you.</p>
+
+      <div class="calendar" id="calendar">
+        <div class="calendar__nav">
+          <button id="calPrev" class="calendar__nav-btn" type="button" aria-label="Previous month">&larr;</button>
+          <h3 id="calLabel" class="calendar__label" aria-live="polite">August 2026</h3>
+          <button id="calNext" class="calendar__nav-btn" type="button" aria-label="Next month">&rarr;</button>
+        </div>
+        <div class="calendar__weekdays" aria-hidden="true">
+          <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+        </div>
+        <div id="calGrid" class="calendar__grid" role="grid" aria-label="Select a date"></div>
+      </div>
+
+      <div id="daySelectedNote" class="selected-note" aria-live="polite" hidden>
+        <p class="selected-note__date"></p>
+        <p class="fine-print">Nice choice.</p>
+      </div>
+
+      <button class="btn btn--primary" id="pickDayBtn" data-next="pick-time" disabled>Pick this day &rarr;</button>
+    </div>
+  </section>
+
+  <!-- SCREEN 05 — PICK A TIME -->
+  <section class="screen" data-screen="pick-time" aria-label="Pick a time">
+    <div class="screen__inner">
+      <button class="btn btn--ghost btn--back" data-back="pick-day">&larr; Back</button>
+      <h2 class="display">And what time?</h2>
+      <p class="body" id="pickTimeSubtitle">&nbsp;</p>
+
+      <div id="timeGrid" class="time-grid" role="listbox" aria-label="Select a time"></div>
+
+      <div id="timeSelectedNote" class="selected-note" aria-live="polite" hidden>
+        <p class="selected-note__date"></p>
+      </div>
+
+      <button class="btn btn--primary" id="pickTimeBtn" data-next="plan" disabled>Next &rarr;</button>
+    </div>
+  </section>
+
+  <!-- SCREEN 06 — CHOOSE THE DATE PLAN -->
+  <section class="screen" data-screen="plan" aria-label="Choose the date plan">
+    <div class="screen__inner">
+      <button class="btn btn--ghost btn--back" data-back="pick-time">&larr; Back</button>
+      <h2 class="display">Okay, now the important part.</h2>
+      <p class="body">What kind of date are we having?</p>
+
+      <div id="activityGrid" class="activity-grid" role="list"></div>
+
+      <button class="btn btn--primary" id="pickPlanBtn" data-next="summary" disabled>This sounds good &rarr;</button>
+    </div>
+  </section>
+
+  <!-- SCREEN 07 — DATE SUMMARY -->
+  <section class="screen" data-screen="summary" aria-label="Date summary">
+    <div class="screen__inner">
+      <button class="btn btn--ghost btn--back" data-back="plan">&larr; Back</button>
+      <h2 class="display display--script">Here's the plan.</h2>
+
+      <div class="summary-card">
+        <div class="photostrip" id="summaryPhotostrip" hidden>
+          <span class="photostrip__sparkle photostrip__sparkle--left" aria-hidden="true">&#10022;</span>
+          <span class="photostrip__sparkle photostrip__sparkle--right" aria-hidden="true">&#10022;</span>
+          <span class="photostrip__tape" aria-hidden="true"></span>
+          <div class="photostrip__grid">
+            <img class="photostrip__img" id="stripImg1" src="" alt="">
+            <img class="photostrip__img" id="stripImg2" src="" alt="">
+            <img class="photostrip__img" id="stripImg3" src="" alt="">
+            <img class="photostrip__img" id="stripImg4" src="" alt="">
+          </div>
+        </div>
+        <p class="summary-card__eyebrow">Our Date</p>
+        <p class="summary-card__row" id="summaryDate">&mdash;</p>
+        <p class="summary-card__row" id="summaryTime">&mdash;</p>
+        <p class="summary-card__row" id="summaryActivity">&mdash;</p>
+        <div class="summary-card__divider" aria-hidden="true"></div>
+        <p class="summary-card__venue-name" id="summaryVenueName">&mdash;</p>
+        <p class="summary-card__venue-address" id="summaryVenueAddress">&mdash;</p>
+        <a id="viewLocationBtn" class="btn btn--outline btn--small" href="#" target="_blank" rel="noopener">View location &#8599;</a>
+      </div>
+
+      <div class="summary-actions">
+        <button class="btn btn--ghost" data-back="plan">&larr; Change something</button>
+        <button class="btn btn--primary" data-next="calendar">Looks good &rarr;</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREEN 08 — GOOGLE CALENDAR -->
+  <section class="screen" data-screen="calendar" aria-label="Save to calendar">
+    <div class="screen__inner screen__inner--center">
+      <button class="btn btn--ghost btn--back" data-back="summary">&larr; Back</button>
+      <h2 class="display">Should we make it official?</h2>
+      <p class="body">Save this little plan to your calendar.</p>
+      <a id="gcalBtn" class="btn btn--primary" href="#" target="_blank" rel="noopener">Save Our Date to Google Calendar &rarr;</a>
+      <button class="btn btn--ghost" data-next="rsvp">I'll remember it &rarr;</button>
+    </div>
+  </section>
+
+  <!-- SCREEN 09 — ARE YOU IN? -->
+  <section class="screen" data-screen="rsvp" aria-label="Are you in?">
+    <div class="screen__inner screen__inner--center">
+      <button class="btn btn--ghost btn--back" data-back="calendar">&larr; Back</button>
+      <h2 class="display">So&hellip; are you actually coming?</h2>
+
+      <div class="rsvp-grid" role="list">
+        <button class="rsvp-card" data-rsvp="yes" type="button">
+          <span class="rsvp-card__icon" aria-hidden="true">&#129309;</span>
+          <span class="rsvp-card__title">Yes</span>
+          <span class="rsvp-card__sub">I'm in.</span>
+        </button>
+        <button class="rsvp-card" data-rsvp="maybe" type="button">
+          <span class="rsvp-card__icon" aria-hidden="true">&#128064;</span>
+          <span class="rsvp-card__title">Maybe</span>
+          <span class="rsvp-card__sub">Let me check.</span>
+        </button>
+        <button class="rsvp-card" data-rsvp="no" type="button">
+          <span class="rsvp-card__icon" aria-hidden="true">&#129397;</span>
+          <span class="rsvp-card__title">No</span>
+          <span class="rsvp-card__sub">Maybe next time.</span>
+        </button>
+      </div>
+      <div id="rsvpParticles" class="rsvp-particles" aria-hidden="true"></div>
+    </div>
+  </section>
+
+  <!-- SCREEN 10 — NAME + MESSAGE -->
+  <section class="screen" data-screen="details" aria-label="Your details">
+    <div class="screen__inner">
+      <button class="btn btn--ghost btn--back" data-back="rsvp">&larr; Back</button>
+      <h2 class="display">One last thing.</h2>
+
+      <form id="detailsForm" novalidate>
+        <div class="field">
+          <label for="guestName">What's your name?</label>
+          <input type="text" id="guestName" name="guestName" placeholder="Your name" autocomplete="name" required>
+        </div>
+        <div class="field">
+          <label for="guestMessage">Anything you want to say?</label>
+          <textarea id="guestMessage" name="guestMessage" placeholder="Leave me a little message&hellip;" rows="3"></textarea>
+        </div>
+        <p id="formError" class="form-error" role="alert" hidden>Mind adding your name first?</p>
+        <button class="btn btn--primary" type="submit">Send it &rarr;</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- SCREEN 11 — FINAL REVEAL -->
+  <section class="screen" data-screen="final" aria-label="Final reveal">
+    <div class="screen__inner screen__inner--center">
+      <h1 class="display display--xl reveal-text" id="finalTitle">&mdash;</h1>
+      <p class="body-lg" id="finalBody">&mdash;</p>
+      <button class="btn btn--ghost" id="editResponseBtn">Edit my response</button>
+    </div>
+  </section>
+
+</main>
+
+<script src="config.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
