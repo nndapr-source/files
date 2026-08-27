@@ -38,6 +38,54 @@
   }
 
   /* ---------------------------------------------------------
+     MEDIA — opening/intro/song/final photos from config
+     --------------------------------------------------------- */
+  function applyMedia() {
+    const media = cfg.media || {};
+
+    const openingScreen = document.querySelector('.screen[data-screen="opening"]');
+    if (openingScreen && media.openingBackground) {
+      openingScreen.style.backgroundImage = 'url("' + media.openingBackground + '")';
+      openingScreen.classList.add("screen--has-bg");
+    }
+
+    const finalScreen = document.querySelector('.screen[data-screen="final"]');
+    if (finalScreen && media.finalBackground) {
+      finalScreen.style.backgroundImage = 'url("' + media.finalBackground + '")';
+      finalScreen.classList.add("screen--has-bg");
+    }
+
+    const photoReveal = document.getElementById("photoReveal");
+    if (photoReveal && media.photoReveal) {
+      photoReveal.src = media.photoReveal;
+      photoReveal.hidden = false;
+    }
+
+    const song = cfg.song || {};
+    const songLabel = document.getElementById("songLabel");
+    if (songLabel && song.label) songLabel.textContent = song.label;
+
+    const songCaption = document.getElementById("songCaption");
+    if (songCaption && song.caption) songCaption.textContent = song.caption;
+
+    const songQuote = document.getElementById("songQuote");
+    if (songQuote) {
+      if (song.quote) {
+        songQuote.textContent = song.quote;
+        songQuote.hidden = false;
+      } else {
+        songQuote.hidden = true;
+      }
+    }
+
+    const songPhoto = document.getElementById("songPhoto");
+    if (songPhoto && song.photo) {
+      songPhoto.src = song.photo;
+      songPhoto.hidden = false;
+    }
+  }
+
+  /* ---------------------------------------------------------
      NAVIGATION
      --------------------------------------------------------- */
   function goTo(name, isBack) {
@@ -512,6 +560,7 @@
      --------------------------------------------------------- */
   function init() {
     applyCopy();
+    applyMedia();
     checkPriorSubmission();
     renderCalendar();
     renderTimeScreen();
